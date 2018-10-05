@@ -1,3 +1,4 @@
+from termcolor import colored
 import requests
 from bs4 import BeautifulSoup
 import urllib2
@@ -7,7 +8,13 @@ def Announcement(x):
     # moves to announcement 
     present = session.get(currentPage)
     #it is the announcement page
-
+    pCont = BeautifulSoup(present.content,'html.parser')
+    an_head = pCont.findAll('td',attrs={'class':'topic starter'})
+    for e in an_head:
+        current = BeautifulSoup(session.get(e.find('a').get('href')).content,'html.parser')
+        print colored('\033[1m'+current.find('h3',attrs={'class','discussionname'}).text,'yellow')
+        print(current.find('div',attrs={'class':'posting fullpost'}).text)
+        print("----------------------------------------------------------------------------")    
 
 # url to the website
 Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
@@ -38,8 +45,9 @@ req = session.post(login,data=Details)
 
 innerHTML = BeautifulSoup(req.content,'html.parser')
 courseList = innerHTML.find('ul',attrs={'class':'unlist'})
-
-#or elements in courseList.findAll('a'):
-current = session.get(courseList.find('a').get('href'))
-currentText = BeautifulSoup(current.content,'html.parser')
-Announcement(currentText)
+for elements in courseList.findAll('a'):
+#print(courseList.findAll('a')[1].text)
+    print colored('\033[1m'+elements.text,'red')
+    current = session.get(elements.get('href'))
+    currentText = BeautifulSoup(current.content,'html.parser')
+    Announcement(currentText)
