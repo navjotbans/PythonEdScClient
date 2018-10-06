@@ -1,15 +1,19 @@
+import os
 from termcolor import colored
 import requests
 from bs4 import BeautifulSoup
 import urllib2
+# defines the parentDirectory 
+scriptDirectory = os.path.dirname(os.path.realpath(__file__))
+
 def download_file(download_url,name):
     response = urllib2.urlopen(download_url)
     file = open(name, 'w')
     file.write(response.read())
     file.close()
-    print("Completed")
+    # print("Completed")
 
-def Announcement(x):
+def Announcement(x,newpath):
     currentPage = x.find('div',attrs={'class':'activityinstance'}).find('a').get('href')
     # moves to announcement 
     present = session.get(currentPage)
@@ -25,11 +29,15 @@ def Announcement(x):
             print(current.find('div',attrs={'class':'posting fullpost'}).text)
             print("----------------------------------------------------------------------------")
             checkPPT=current.find('div',attrs={'class':'attachments'})
-            # if(checkPPT):
-            #     currentPPT=checkPPT.findAll('a')[1].get('href')
-            #     currentName = checkPPT.findAll('a')[1].text
-            #     #download to a specific directory
-                #download_file(currentPPT,currentName)
+            if(checkPPT):
+                if not os.path.exists(newpath):
+                    os.makedirs(newpath)
+                os.chdir(os.path.dirname(os.path.abspath(__file__))+'/'+newpath)
+                currentPPT=checkPPT.findAll('a')[1].get('href')
+                currentName = checkPPT.findAll('a')[1].text
+                #download to a specific directory
+                download_file(currentPPT,currentName)
+            os.chdir(scriptDirectory)    
 # url to the website
 Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
            'password':'bansalfamily007'}
@@ -63,5 +71,4 @@ for elements in courseList.findAll('a'):
     print colored('\033[1m'+elements.text,'red')
     current = session.get(elements.get('href'))
     currentText = BeautifulSoup(current.content,'html.parser')
-    Announcement(currentText)
-    ""
+    Announcement(currentText,elements.text)
