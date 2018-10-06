@@ -2,6 +2,12 @@ from termcolor import colored
 import requests
 from bs4 import BeautifulSoup
 import urllib2
+def download_file(download_url,name):
+    response = urllib2.urlopen(download_url)
+    file = open(name, 'w')
+    file.write(response.read())
+    file.close()
+    print("Completed")
 
 def Announcement(x):
     currentPage = x.find('div',attrs={'class':'activityinstance'}).find('a').get('href')
@@ -17,8 +23,13 @@ def Announcement(x):
             current = BeautifulSoup(session.get(e.find('a').get('href')).content,'html.parser')
             print colored('\033[1m'+current.find('h3',attrs={'class','discussionname'}).text,'yellow')
             print(current.find('div',attrs={'class':'posting fullpost'}).text)
-            print("----------------------------------------------------------------------------")    
-
+            print("----------------------------------------------------------------------------")
+            checkPPT=current.find('div',attrs={'class':'attachments'})
+            if(checkPPT):
+                currentPPT=checkPPT.findAll('a')[1].get('href')
+                currentName = checkPPT.findAll('a')[1].text
+                download_file(currentPPT,currentName)
+                #download to a specific directory
 # url to the website
 Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
            'password':'bansalfamily007'}
@@ -54,3 +65,4 @@ for elements in courseList.findAll('a'):
     current = session.get(elements.get('href'))
     currentText = BeautifulSoup(current.content,'html.parser')
     Announcement(currentText)
+    
