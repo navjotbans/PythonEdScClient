@@ -10,18 +10,21 @@ def Announcement(x):
     #it is the announcement page
     pCont = BeautifulSoup(present.content,'html.parser')
     an_head = pCont.findAll('td',attrs={'class':'topic starter'})
-    for e in an_head:
-        current = BeautifulSoup(session.get(e.find('a').get('href')).content,'html.parser')
-        print colored('\033[1m'+current.find('h3',attrs={'class','discussionname'}).text,'yellow')
-        print(current.find('div',attrs={'class':'posting fullpost'}).text)
-        print("----------------------------------------------------------------------------")    
+    if len(an_head)==0:
+        print colored('\033[1m'+"No Announcements Yet!",'blue')
+    else:
+        for e in an_head:
+            current = BeautifulSoup(session.get(e.find('a').get('href')).content,'html.parser')
+            print colored('\033[1m'+current.find('h3',attrs={'class','discussionname'}).text,'yellow')
+            print(current.find('div',attrs={'class':'posting fullpost'}).text)
+            print("----------------------------------------------------------------------------")    
 
 # url to the website
 Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
            'password':'bansalfamily007'}
 
 #creating a single session 
-
+ 
 session  = requests.session()
 
 #url to the Nalanda 
