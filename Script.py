@@ -25,15 +25,14 @@ def Announcement(x):
             print(current.find('div',attrs={'class':'posting fullpost'}).text)
             print("----------------------------------------------------------------------------")
             checkPPT=current.find('div',attrs={'class':'attachments'})
-            if(checkPPT):
-                currentPPT=checkPPT.findAll('a')[1].get('href')
-                currentName = checkPPT.findAll('a')[1].text
-                download_file(currentPPT,currentName)
-                #download to a specific directory
+            # if(checkPPT):
+            #     currentPPT=checkPPT.findAll('a')[1].get('href')
+            #     currentName = checkPPT.findAll('a')[1].text
+            #     #download to a specific directory
+                #download_file(currentPPT,currentName)
 # url to the website
 Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
            'password':'bansalfamily007'}
-
 #creating a single session 
  
 session  = requests.session()
@@ -65,4 +64,4 @@ for elements in courseList.findAll('a'):
     current = session.get(elements.get('href'))
     currentText = BeautifulSoup(current.content,'html.parser')
     Announcement(currentText)
-    
+    ""
