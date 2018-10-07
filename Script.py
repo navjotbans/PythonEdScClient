@@ -3,14 +3,17 @@ from termcolor import colored
 import requests
 from bs4 import BeautifulSoup
 import urllib2
+#define your chunk size
+chunk_size = 200
 # defines the parentDirectory 
 scriptDirectory = os.path.dirname(os.path.realpath(__file__))
 
 def download_file(download_url,name):
-    response = urllib2.urlopen(download_url)
-    file = open(name, 'w')
-    file.write(response.read())
-    file.close()
+    #downloads html instead of Files
+    r = session.get(download_url, stream=True)
+    with open(name, 'wb') as fd:
+        for chunk in r.iter_content(chunk_size):
+            fd.write(chunk)
     # print("Completed")
 
 def Announcement(x,newpath):
