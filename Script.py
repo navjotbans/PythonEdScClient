@@ -8,6 +8,8 @@ chunk_size = 200
 # defines the parentDirectory 
 scriptDirectory = os.path.dirname(os.path.realpath(__file__))
 
+#download slides from the main page
+
 def download_file(download_url,name):
     #downloads html instead of Files
     r = session.get(download_url, stream=True)
@@ -15,6 +17,34 @@ def download_file(download_url,name):
         for chunk in r.iter_content(chunk_size):
             fd.write(chunk)
     # print("Completed")
+# def Notices(x,newpath):
+#     print colored('\033[1m'+" Notice !",'whtie')
+#     current = x.findAll('div',attrs={'class':'content'})[1].findAll('a')
+#     # moves to Notices 
+#     if len(current)==0:
+#         print colored('\033[1m'+"No Notice Yet!",'blue')
+#     for currentPage in current:
+#         present = session.get(currentPage)
+#     #it is the Notice page
+#         pCont = BeautifulSoup(present.content,'html.parser')
+#         print colored('\033[1m'+current.find('div',attrs={'role','main'}).find('h2').text,'yellow')
+#         print colored('\033[1m'+current.find('div',attrs={'class','no-overflow'}).find('p').text,'white')
+#         print("----------------------------------------------------------------------------")
+
+def downloadSlide(x,newpath):
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    Allcurrent = x.findAll('div',attrs={'class':'content'})
+    for i in range(2,Allcurrent.__len__()):
+        currentPage = Allcurrent[i].findAll('div',attrs={'class':'activityinstance'})
+        for elements in currentPage:
+            fileid = elements.find('a').get('href')
+            filename = elements.find('span',attrs={'class':'instancename'}).text
+            os.chdir(os.path.dirname(os.path.abspath(__file__))+'/'+newpath)
+            #download to a specific directory
+            if not os.path.exists(scriptDirectory+'/'+newpath+'/'+filename):
+                download_file(fileid,filename)
+            os.chdir(scriptDirectory)
 
 def Announcement(x,newpath):
     currentPage = x.find('div',attrs={'class':'activityinstance'}).find('a').get('href')
@@ -24,7 +54,7 @@ def Announcement(x,newpath):
     pCont = BeautifulSoup(present.content,'html.parser')
     an_head = pCont.findAll('td',attrs={'class':'topic starter'})
     if len(an_head)==0:
-        print colored('\033[1m'+"No Announcements Yet!",'blue')
+        print colored('\033[1m'+"No Notices Yet!",'blue')
     else:
         for e in an_head:
             current = BeautifulSoup(session.get(e.find('a').get('href')).content,'html.parser')
@@ -39,7 +69,8 @@ def Announcement(x,newpath):
                 currentPPT=checkPPT.findAll('a')[1].get('href')
                 currentName = checkPPT.findAll('a')[1].text
                 #download to a specific directory
-                download_file(currentPPT,currentName)
+                if not os.path.exists(scriptDirectory+'/'+newpath+'/'+currentName):
+                    download_file(currentPPT,currentName)
             os.chdir(scriptDirectory)    
 # url to the website
 Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
@@ -75,3 +106,5 @@ for elements in courseList.findAll('a'):
     current = session.get(elements.get('href'))
     currentText = BeautifulSoup(current.content,'html.parser')
     Announcement(currentText,elements.text)
+    # Notices(currentText,elements.text)
+    downloadSlide(currentText,elements.text)
