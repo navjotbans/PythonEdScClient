@@ -1,8 +1,11 @@
 import os
-from termcolor import colored
-import requests
-from bs4 import BeautifulSoup
-import urllib2
+try :
+    from termcolor import colored
+    import requests
+    from bs4 import BeautifulSoup
+    import urllib2
+except ImportError:
+    quit("Install The required Libraries :/")
 #define your chunk size
 chunk_size = 200
 # defines the parentDirectory 
@@ -20,6 +23,7 @@ def Notices(x,newpath):
             print colored('\033[1m'+section.find('h2').text)
             for content in section.findAll('p'):
                 print colored('\033[1m'+content.text,'green')
+            print("----------------------------------------------------------------------------")
         else:
             # print "No Page"
             if not os.path.exists(newpath):
@@ -83,26 +87,34 @@ def Announcement(x,newpath):
 Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
            'password':'bansalfamily007'}
 #creating a single session 
-session  = requests.session()
-#url to the Nalanda 
-url = "http://nalanda.bits-pilani.ac.in/"
-# current page
-c_page = urllib2.urlopen(url)
-# storing the scraped page
-innerHTML = BeautifulSoup(c_page,'html.parser')
-# login button 
-login = (innerHTML.find('span', attrs={'class':'login'})).find('a').get('href')
-# login Page
-loginPage = urllib2.urlopen(login)
-req = session.post(login,data=Details)
-# current url is => req.url
-innerHTML = BeautifulSoup(req.content,'html.parser')
-courseList = innerHTML.find('ul',attrs={'class':'unlist'})
-for elements in courseList.findAll('a'):
-#print(courseList.findAll('a')[1].text)
-    print colored('\033[1m'+elements.text,'red')
-    current = session.get(elements.get('href'))
-    currentText = BeautifulSoup(current.content,'html.parser')
-    Announcement(currentText,elements.text)
-    Notices(currentText,elements.text)
-    downloadSlide(currentText,elements.text)
+try:
+    session  = requests.session()
+    #url to the Nalanda 
+    url = "http://nalanda.bits-pilani.ac.in/"
+    # current page
+    c_page = urllib2.urlopen(url)
+    # storing the scraped page
+    innerHTML = BeautifulSoup(c_page,'html.parser')
+    # login button 
+    login = (innerHTML.find('span', attrs={'class':'login'})).find('a').get('href')
+    # login Page
+    loginPage = urllib2.urlopen(login)
+    req = session.post(login,data=Details)
+    # current url is => req.url
+    innerHTML = BeautifulSoup(req.content,'html.parser')
+    courseList = innerHTML.find('ul',attrs={'class':'unlist'})
+    for elements in courseList.findAll('a'):
+    #print(courseList.findAll('a')[1].text)
+        print colored('\033[1m'+elements.text,'red')
+        current = session.get(elements.get('href'))
+        currentText = BeautifulSoup(current.content,'html.parser')
+        Announcement(currentText,elements.text)
+        Notices(currentText,elements.text)
+        downloadSlide(currentText,elements.text)
+#catch all the exceptions 
+except KeyboardInterrupt:
+    quit("Damn That was an abrupt close")
+except requests.exceptions.ConnectionError:
+    quit("You know how internet is here right :(")
+except IOError:
+    quit("The Force is not with you right now")
