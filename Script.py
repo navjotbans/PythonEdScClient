@@ -84,8 +84,8 @@ def Announcement(x,newpath):
                     download_file(currentPPT,currentName)
             os.chdir(scriptDirectory)    
 # url to the website
-Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
-           'password':'bansalfamily007'}
+Details = {'username':'xxxxx@pilani.bits-pilani.ac.in',
+           'password':'xxxxx'}
 #creating a single session 
 try:
     session  = requests.session()
