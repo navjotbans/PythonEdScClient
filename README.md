@@ -1,3 +1,4 @@
-# The script enables the user to Fetch every Update in the Announcements in a within Seconds
+#The script has the aim to automate the tideous task of looking for slides and downloading them   
 
-![Screenshot](ScriptEdPyClient.png)
+![Screenshot](Screenshot/Announcements.png)
+![Screenshot](Screenshot/Notices.png)
