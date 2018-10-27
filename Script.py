@@ -1,4 +1,5 @@
 import os
+import platform
 try :
     from termcolor import colored
     import requests
@@ -6,13 +7,22 @@ try :
     import urllib2
 except ImportError:
     quit("Install The required Libraries :/")
+#checking the Platform 
+
+if platform.system()=='Linux':
+    flag=1
+else:
+    flag=0
 #define your chunk size
 chunk_size = 200
 # defines the parentDirectory 
 scriptDirectory = os.path.dirname(os.path.realpath(__file__))
 #download slides from the main page
 def Notices(x,newpath):
-    print colored('\033[1m'+"Notices!",'white')
+    if flag:
+        print colored('\033[1m'+"Notices!",'white')
+    else:
+        print ('\033[1m'+"Notices!")
     li = x.find('li',attrs={'aria-label':'Notice Section'}).findAll('div',attrs={'class':'activityinstance'})
     for elements in li:
         if elements.find('span',attrs={'class':'accesshide '}).text == " Page":
@@ -20,9 +30,12 @@ def Notices(x,newpath):
             current = session.get(elements.find('a').get('href'))
             currentPage = BeautifulSoup(current.content,'html.parser')
             section = currentPage.find('div',attrs={'role':'main'})
-            print colored('\033[1m'+section.find('h2').text)
+            print ('\033[1m'+section.find('h2').text)
             for content in section.findAll('p'):
-                print colored('\033[1m'+content.text,'green')
+                if flag:
+                    print colored('\033[1m'+content.text,'green')
+                else:
+                    print ('\033[1m'+content.text)
             print("----------------------------------------------------------------------------")
         else:
             # print "No Page"
@@ -69,7 +82,10 @@ def Announcement(x,newpath):
     else:
         for e in an_head:
             current = BeautifulSoup(session.get(e.find('a').get('href')).content,'html.parser')
-            print colored('\033[1m'+current.find('h3',attrs={'class','discussionname'}).text,'yellow')
+            if flag:
+                print colored('\033[1m'+current.find('h3',attrs={'class','discussionname'}).text,'yellow')
+            else:
+                print ('\033[1m'+current.find('h3',attrs={'class','discussionname'}).text)
             print current.find('div',attrs={'class':'posting fullpost'}).text
             print("----------------------------------------------------------------------------")
             checkPPT=current.find('div',attrs={'class':'attachments'})
@@ -84,8 +100,8 @@ def Announcement(x,newpath):
                     download_file(currentPPT,currentName)
             os.chdir(scriptDirectory)    
 # url to the website
-Details = {'username':'XXXXX@pilani.bits-pilani.ac.in',
-           'password':'XXXXX'}
+Details = {'username':'XXXX@pilani.bits-pilani.ac.in',
+           'password':'XXXX'}
 #creating a single session 
 try:
     session  = requests.session()
@@ -105,7 +121,10 @@ try:
     courseList = innerHTML.find('ul',attrs={'class':'unlist'})
     for elements in courseList.findAll('a'):
     #print(courseList.findAll('a')[1].text)
-        print colored('\033[1m'+elements.text,'red')
+        if flag:
+            print colored('\033[1m'+elements.text,'red')
+        else:
+            print ('\033[1m'+elements.text)
         current = session.get(elements.get('href'))
         currentText = BeautifulSoup(current.content,'html.parser')
         Announcement(currentText,elements.text)
