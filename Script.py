@@ -1,18 +1,19 @@
+#checking the Platform
 import os
-import platform
+import platform 
+if platform.system()=='Linux':
+    flag=1
+else:
+    flag=0
 try :
-    from termcolor import colored
+    if flag:
+        from termcolor import colored
     import requests
     from bs4 import BeautifulSoup
     import urllib2
 except ImportError:
     quit("Install The required Libraries :/")
-#checking the Platform 
 
-if platform.system()=='Linux':
-    flag=1
-else:
-    flag=0
 #define your chunk size
 chunk_size = 200
 # defines the parentDirectory 
@@ -100,8 +101,8 @@ def Announcement(x,newpath):
                     download_file(currentPPT,currentName)
             os.chdir(scriptDirectory)    
 # url to the website
-Details = {'username':'XXXX@pilani.bits-pilani.ac.in',
-           'password':'XXXX'}
+Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
+           'password':'bansalfamily007'}
 #creating a single session 
 try:
     session  = requests.session()
