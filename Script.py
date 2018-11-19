@@ -13,7 +13,7 @@ except ImportError:
 chunk_size = 200
 # defines the parentDirectory 
 scriptDirectory = os.path.dirname(os.path.realpath(__file__))
-#downloads assignments if any
+#downloads assignments
 def Assignment(x,newpath,filename):
     print colored('\033[1m'+"Assignment!",'white')
     # print(x.text)
