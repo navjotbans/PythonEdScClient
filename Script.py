@@ -121,8 +121,8 @@ def Announcement(x,newpath):
             os.chdir(scriptDirectory)
                 
 # url to the website
-Details = {'username':'XXXX@pilani.bits-pilani.ac.in',
-           'password':'XXXX'}
+Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
+           'password':'bansalfamily007'}
 #creating a single session 
 try:
     session  = requests.session()
@@ -174,10 +174,10 @@ try:
         if(currentText.findAll('li',attrs={'aria-label':'Assignment'})):
             AsignList=currentText.findAll('li',attrs={'aria-label':'Assignment'})
             Asigndiv = AsignList[0].findAll('div',attrs={'class':'activityinstance'})
-        for x in Asigndiv:
-            # print(x.find('a').get('href'))
-            if(x.find('a').get('href')):
-                Assignment(x.find('a').get('href'),CourseName[c].text,x.find('a').text)
+            for x in Asigndiv:
+                # print(x.find('a').get('href'))
+                if(x.find('a').get('href')):
+                    Assignment(x.find('a').get('href'),CourseName[c].text,x.find('a').text)
         Announcement(currentText,CourseName[c].text)
         Notices(currentText,CourseName[c].text)
         downloadSlide(currentText,CourseName[c].text)
