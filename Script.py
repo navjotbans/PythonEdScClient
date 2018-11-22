@@ -2,12 +2,12 @@
 import os
 import platform 
 try :
-    from termcolor import colored
+    from termcolor import colored    
     import requests
     from bs4 import BeautifulSoup
     import urllib2
 except ImportError:
-    quit("Install The required Libraries :/")
+    quit("Install The required Libraries stated in the README.md")
 
 #define your chunk size
 chunk_size = 200
@@ -140,24 +140,47 @@ try:
     # current url is => req.url
     innerHTML = BeautifulSoup(req.content,'html.parser')
     courseList = innerHTML.find('ul',attrs={'class':'unlist'})
-    for elements in courseList.findAll('a'):
-    #print(courseList.findAll('a')[1].text)
-        print colored('\033[1m'+elements.text,'red')
-        # print(elements.get('href'))
-        current = session.get(elements.get('href'))
+    CourseName = courseList.findAll('a')
+    for x in range(1,len(CourseName)):
+        print colored("press %s for %s" %(x,CourseName[x].text),"cyan")
+    print colored("press Y for Every Notice","cyan")
+    
+    print ("Give Input for the desired Course")
+    c = input()
+    # print(x)
+    if(c=="Y" or c=="y"):
+        for elements in courseList.findAll('a'):
+        #print(courseList.findAll('a')[1].text)
+            print colored('\033[1m'+elements.text,'red')
+            # print(elements.get('href'))
+            current = session.get(elements.get('href'))
+            currentText = BeautifulSoup(current.content,'html.parser')
+            # print(currentText.findAll('li',attrs={'aria-label':'Assignment'}))          
+            if(currentText.findAll('li',attrs={'aria-label':'Assignment'})):
+                AsignList=currentText.findAll('li',attrs={'aria-label':'Assignment'})
+                Asigndiv = AsignList[0].findAll('div',attrs={'class':'activityinstance'})
+                for x in Asigndiv:
+                    # print(x.find('a').get('href'))
+                    if(x.find('a').get('href')):
+                        Assignment(x.find('a').get('href'),elements.text,x.find('a').text)
+            Announcement(currentText,elements.text)
+            Notices(currentText,elements.text)
+            downloadSlide(currentText,elements.text)
+    else:
+        print colored('\033[1m'+CourseName[c].text,'red')
+        current = session.get(CourseName[c].get('href'))
         currentText = BeautifulSoup(current.content,'html.parser')
-        # print(currentText.findAll('li',attrs={'aria-label':'Assignment'}))          
+            # print(currentText.findAll('li',attrs={'aria-label':'Assignment'}))          
         if(currentText.findAll('li',attrs={'aria-label':'Assignment'})):
             AsignList=currentText.findAll('li',attrs={'aria-label':'Assignment'})
             Asigndiv = AsignList[0].findAll('div',attrs={'class':'activityinstance'})
-            for x in Asigndiv:
-                # print(x.find('a').get('href'))
-                if(x.find('a').get('href')):
-                    Assignment(x.find('a').get('href'),elements.text,x.find('a').text)
-        Announcement(currentText,elements.text)
-        Notices(currentText,elements.text)
-        downloadSlide(currentText,elements.text)
-
+        for x in Asigndiv:
+            # print(x.find('a').get('href'))
+            if(x.find('a').get('href')):
+                Assignment(x.find('a').get('href'),CourseName[c].text,x.find('a').text)
+        Announcement(currentText,CourseName[c].text)
+        Notices(currentText,CourseName[c].text)
+        downloadSlide(currentText,CourseName[c].text)
 #catch all the exceptions 
 except KeyboardInterrupt:
     quit("Damn That was an abrupt close")
