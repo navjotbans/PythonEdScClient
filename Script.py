@@ -121,8 +121,8 @@ def Announcement(x,newpath):
             os.chdir(scriptDirectory)
                 
 # url to the website
-Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
-           'password':'bansalfamily007'}
+Details = {'username':'XXXX@pilani.bits-pilani.ac.in',
+           'password':'XXXX'}
 #creating a single session 
 try:
     session  = requests.session()
@@ -143,12 +143,12 @@ try:
     CourseName = courseList.findAll('a')
     for x in range(1,len(CourseName)):
         print colored("press %s for %s" %(x,CourseName[x].text),"cyan")
-    print colored("press Y for Every Notice","cyan")
+    print colored("press 0 for Every Notice","cyan")
     
     print ("Give Input for the desired Course")
     c = input()
     # print(x)
-    if(c=="Y" or c=="y"):
+    if c==0:
         for elements in courseList.findAll('a'):
         #print(courseList.findAll('a')[1].text)
             print colored('\033[1m'+elements.text,'red')
