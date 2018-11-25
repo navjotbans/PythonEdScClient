@@ -121,8 +121,8 @@ def Announcement(x,newpath):
             os.chdir(scriptDirectory)
                 
 # url to the website
-Details = {'username':'XXXX@pilani.bits-pilani.ac.in',
-           'password':'XXXX'}
+Details = {'username':'f2016070@pilani.bits-pilani.ac.in',
+           'password':'bansalfamily007'}
 #creating a single session 
 if Details['username'] == 'XXXX@pilani.bits-pilani.ac.in':
     print colored("change the details in Script.py","cyan")
@@ -145,14 +145,14 @@ else:
         innerHTML = BeautifulSoup(req.content,'html.parser')
         courseList = innerHTML.find('ul',attrs={'class':'unlist'})
         CourseName = courseList.findAll('a')
-        for x in range(1,len(CourseName)):
+        for x in range(0,len(CourseName)):
             print colored("press %s for %s" %(x,CourseName[x].text),"cyan")
-        print colored("press 0 for Every Notice","cyan")
+        print colored("press * for Every Notice","cyan")
         
         print ("Give Input for the desired Course")
-        c = input()
+        c = raw_input()
         # print(x)
-        if c==0:
+        if c=='*':
             for elements in courseList.findAll('a'):
             #print(courseList.findAll('a')[1].text)
                 print colored('\033[1m'+elements.text,'red')
